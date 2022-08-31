@@ -12,6 +12,7 @@ import Product from './pages/product';
 import NewArrival from './pages/newArirval';
 import SearchResult from './pages/searchResult';
 import PopupLogin from './component/popupLogin';
+import Slider from "./component/slider";
 
 function App() {
   return (
