@@ -105,7 +105,7 @@ function Navbar(props) {
   console.log("reducersCart", props);
 
   return (
-    <div className="w-full h-12 bg-navbar flex items-center sm:px-0 px-2 justify-between shadow-lg shadow-slate-700 relative z-10">
+    <div className="w-full h-12 bg-navbar flex items-center sm:px-0 px-2 justify-between shadow-lg shadow-button/[15%] relative z-10">
       <h1
         onClick={() => handleHome()}
         className="font-bold xl:text-2xl  lg:text-lg sm:text-base sm:pl-6 text-xs text-button hover:cursor-pointer"
