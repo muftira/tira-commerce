@@ -8,6 +8,8 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducers from './redux/reducers';
 import { BrowserRouter } from "react-router-dom";
+import "swiper/css/bundle";
+import "./style.css";
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)))
 
