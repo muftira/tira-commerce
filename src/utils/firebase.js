@@ -1,16 +1,15 @@
 import { initializeApp } from "firebase/app";
-
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAK3utof5nHBicHeGWQ0jS-9MQcRdMQG98",
-    authDomain: "tira-commerce.firebaseapp.com",
-    projectId: "tira-commerce",
-    storageBucket: "tira-commerce.appspot.com",
-    messagingSenderId: "418799121550",
-    appId: "1:418799121550:web:fe00de9323959380c545df",
-    measurementId: "G-5X357ZE3L2"
-  };
+  apiKey: "AIzaSyCygipZvf6lZxlYFxNfIA_XHF3i-PO6sXY",
+  authDomain: "athentication-a9aa7.firebaseapp.com",
+  projectId: "athentication-a9aa7",
+  storageBucket: "athentication-a9aa7.appspot.com",
+  messagingSenderId: "1087359739133",
+  appId: "1:1087359739133:web:b9b2acd3418c827e188a94",
+  measurementId: "G-HWWK664P81"
+};
 
-firebase.initializeApp(firebaseConfig);
-
-export default firebase
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app)

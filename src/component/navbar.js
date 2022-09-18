@@ -2,36 +2,40 @@ import React, { useState, useEffect } from "react";
 import { FiShoppingCart, FiSearch } from "react-icons/fi";
 import { RiArrowDownSFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import {getCategory } from "../utils/axios";
+import { getCategory } from "../utils/axios";
 import { useDispatch, connect } from "react-redux";
-import { jacketsProduct,shirtsProduct,pantsProduct, getShoppingCarts, getProduct } from "../redux/action";
+import {
+  jacketsProduct,
+  shirtsProduct,
+  pantsProduct,
+  getShoppingCarts,
+  getProduct,
+} from "../redux/action";
+import { auth } from "../utils/firebase";
+import { signOut } from "firebase/auth";
 
 function Navbar(props) {
   const [dropdown, setDropdown] = useState(false);
-  const [searchTerm, setSearchTerm] = useState([])
-  const [inputField, setInputField] = useState('')
+  const [searchTerm, setSearchTerm] = useState([]);
+  const [inputField, setInputField] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const options1 = { style: 'currency', currency: 'IDR' };
-  const numberFormat1 = new Intl.NumberFormat('id-ID', options1);
+  const options1 = { style: "currency", currency: "IDR" };
+  const numberFormat1 = new Intl.NumberFormat("id-ID", options1);
 
   useEffect(() => {
-    dispatch(getProduct())
-    dispatch(getShoppingCarts())
-  }, [])
-  
+    dispatch(getProduct());
+    dispatch(getShoppingCarts());
+  }, []);
 
   const handleHome = () => {
-    setDropdown(false)
-    navigate('/')
-  }
-    const handleJackets = () => {
+    setDropdown(false);
+    navigate("/");
+  };
+  const handleJackets = () => {
     const choseCategory = "Jackets";
     getCategory(choseCategory)
-      .then(
-        (res) => localJackets(res.data),
-        navigate(choseCategory)
-      )
+      .then((res) => localJackets(res.data), navigate(choseCategory))
       .catch((error) => console.log("GAGAL =>", error));
   };
   const handleShirts = () => {
@@ -48,22 +52,22 @@ function Navbar(props) {
   };
 
   function localJackets(data) {
-    localStorage.setItem("jackets", JSON.stringify(data))
-    const jackets = JSON.parse(localStorage.getItem('jackets'))
-    dispatch(jacketsProduct(jackets))
-    setDropdown(!dropdown)
+    localStorage.setItem("jackets", JSON.stringify(data));
+    const jackets = JSON.parse(localStorage.getItem("jackets"));
+    dispatch(jacketsProduct(jackets));
+    setDropdown(!dropdown);
   }
   function localShirts(data) {
-    localStorage.setItem("shirts", JSON.stringify(data))
-    const shirts = JSON.parse(localStorage.getItem('shirts')) 
-    dispatch(shirtsProduct(shirts))
-    setDropdown(!dropdown)
+    localStorage.setItem("shirts", JSON.stringify(data));
+    const shirts = JSON.parse(localStorage.getItem("shirts"));
+    dispatch(shirtsProduct(shirts));
+    setDropdown(!dropdown);
   }
   function localPants(data) {
-    localStorage.setItem("pants", JSON.stringify(data))
-    const pants = JSON.parse(localStorage.getItem('pants'))
-    dispatch(pantsProduct(pants))
-    setDropdown(!dropdown)
+    localStorage.setItem("pants", JSON.stringify(data));
+    const pants = JSON.parse(localStorage.getItem("pants"));
+    dispatch(pantsProduct(pants));
+    setDropdown(!dropdown);
   }
 
   // const handleNewArrival = () => {
@@ -72,35 +76,41 @@ function Navbar(props) {
   // }
 
   const searchFilter = (e) => {
-    const searchWords = e.target.value
-    setInputField(searchWords)
-    const newFilter = props.listReducers.list.filter(product => {
-      return product.name.toLowerCase().includes(searchWords.toLowerCase())
-    })
+    const searchWords = e.target.value;
+    setInputField(searchWords);
+    const newFilter = props.listReducers.list.filter((product) => {
+      return product.name.toLowerCase().includes(searchWords.toLowerCase());
+    });
 
-    if(searchWords === '') {
-      setSearchTerm([])
-    }else{
-      setSearchTerm(newFilter) 
+    if (searchWords === "") {
+      setSearchTerm([]);
+    } else {
+      setSearchTerm(newFilter);
     }
-  }
+  };
 
   const handleClickSearch = (item) => {
-    localStorage.setItem('detail',JSON.stringify([item]))
-    setInputField('')
-    setSearchTerm([])
-    navigate('/detail')
-    window.location.reload()
-  }
+    localStorage.setItem("detail", JSON.stringify([item]));
+    setInputField("");
+    setSearchTerm([]);
+    navigate("/detail");
+    window.location.reload();
+  };
 
   const handleClickResult = (e) => {
-    e.preventDefault()
-    localStorage.setItem('seachResult', JSON.stringify(searchTerm))
-    setInputField('')
-    setSearchTerm([])
-    navigate('/searchresult')
+    e.preventDefault();
+    localStorage.setItem("seachResult", JSON.stringify(searchTerm));
+    setInputField("");
+    setSearchTerm([]);
+    navigate("/searchresult");
+    window.location.reload();
+  };
+
+  const logOut = async (e) => {
+    e.preventDefault();
+    await signOut(auth);
     window.location.reload()
-  }
+  };
 
   console.log("reducersCart", props);
 
@@ -153,7 +163,10 @@ function Navbar(props) {
           </div>
         </div>
       </div>
-      <form onSubmit={(e) => handleClickResult(e)} className="flex items-center">
+      <form
+        onSubmit={(e) => handleClickResult(e)}
+        className="flex items-center"
+      >
         <input
           className="rounded-tl-lg rounded-bl-lg xl:w-[500px] lg:w-[400px] sm:w-[100px] w-[100px] h-7 px-3 py-2"
           type="text"
@@ -161,47 +174,76 @@ function Navbar(props) {
           onChange={(e) => searchFilter(e)}
           value={inputField}
         />
-        {searchTerm.length != 0 && (<div className=" absolute flex flex-col items-center space-y-3 top-10  p-2 bg-white border-2 border-slate-300">
-          {searchTerm.map(items => <div onClick={() => handleClickSearch(items)} className="flex lg:flex-row flex-col xl:w-[480px] xl:h-[120px] lg:w-[380px] lg:h-[120px] w-[100px] h-[180px]  hover:bg-neutral-400 hover:rounded-lg hover:cursor-pointer ">
-              <div className=" h-[120px] w-[100px] bg-neutral-400 overflow-hidden rounded-lg">
-                <img src={items.color[0].pict[0].url} alt="" />
+        {searchTerm.length != 0 && (
+          <div className=" absolute flex flex-col items-center space-y-3 top-10  p-2 bg-white border-2 border-slate-300">
+            {searchTerm.map((items) => (
+              <div
+                onClick={() => handleClickSearch(items)}
+                className="flex lg:flex-row flex-col xl:w-[480px] xl:h-[120px] lg:w-[380px] lg:h-[120px] w-[100px] h-[180px]  hover:bg-neutral-400 hover:rounded-lg hover:cursor-pointer "
+              >
+                <div className=" h-[120px] w-[100px] bg-neutral-400 overflow-hidden rounded-lg">
+                  <img src={items.color[0].pict[0].url} alt="" />
+                </div>
+                <div className="flex flex-col lg:justify-evenly  lg:ml-2 ml-0">
+                  <p className="font-bold">{items.name}</p>
+                  <p className="flex">{numberFormat1.format(items.price)}</p>
+                </div>
               </div>
-              <div className="flex flex-col lg:justify-evenly  lg:ml-2 ml-0">
-                <p className="font-bold">{items.name}</p>
-                <p className="flex">{numberFormat1.format(items.price)}</p>
-              </div>
-          </div>)}
-          
-      </div>)}
+            ))}
+          </div>
+        )}
         <button>
           <FiSearch className="rounded-tr-lg rounded-br-lg  bg-button sm:w-6 xl:w-14 sm:h-7 w-7 h-7" />
         </button>
       </form>
-      
+
       <div
         onClick={() => navigate("shoppingcart")}
         className="flex  items-center hover:cursor-pointer"
       >
-        {props.getCartsReducers.getCartResult.length ? <div className="sm:h-5 sm:w-5 h-4 w-4 bg-red-700 rounded-full flex justify-center items-start">
-          <p className="text-white sm:text-sm text-xs">{props.getCartsReducers.getCartResult.length}</p>
-        </div> : null }
-        
-        <FiShoppingCart className="sm:w-[25px] sm:h-[25px] w-[15px] h-[15px]" color="white" title="CART" />
+        {props.getCartsReducers.getCartResult.length ? (
+          <div className="sm:h-5 sm:w-5 h-4 w-4 bg-red-700 rounded-full flex justify-center items-start">
+            <p className="text-white sm:text-sm text-xs">
+              {props.getCartsReducers.getCartResult.length}
+            </p>
+          </div>
+        ) : null}
+
+        <FiShoppingCart
+          className="sm:w-[25px] sm:h-[25px] w-[15px] h-[15px]"
+          color="white"
+          title="CART"
+        />
       </div>
-      <div className="sm:flex justify-center items-center pr-6 hidden">
-        <button className="h-7 w-16 items-center border-2 border-white rounded-md">
-          <p onClick={() => navigate("login")} className="text-white text-sm">
-            Log in
-          </p>
-        </button>
-        <button className="h-7 w-16 items-center bg-button rounded-md ml-4">
-          <p onClick={() => navigate("signup")} className="text-black text-sm">
-            Sign up
-          </p>{" "}
-        </button>
-      </div>
+      {auth.currentUser && auth.currentUser.email ? (
+        <div className="sm:flex justify-center items-center pr-6 hidden">
+          <p className="text-white">{auth.currentUser.email}</p>
+          <button
+            onClick={(e) => logOut(e)}
+            className="h-7 w-16 items-center bg-button rounded-md ml-4"
+          >
+            Sign Out
+          </button>
+        </div>
+      ) : (
+        <div className="sm:flex justify-center items-center pr-6 hidden">
+          <button className="h-7 w-16 items-center border-2 border-white rounded-md">
+            <p onClick={() => navigate("login")} className="text-white text-sm">
+              Log in
+            </p>
+          </button>
+          <button className="h-7 w-16 items-center bg-button rounded-md ml-4">
+            <p
+              onClick={() => navigate("signup")}
+              className="text-black text-sm"
+            >
+              Sign up
+            </p>{" "}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
 
-export default connect(state => state)(Navbar);
+export default connect((state) => state)(Navbar);
