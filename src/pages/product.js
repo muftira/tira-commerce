@@ -5,6 +5,7 @@ import {detailProduct} from '../redux/action'
 import { useNavigate } from "react-router-dom";
 import Slider from "../component/slider";
 import SliderSwiper from "../component/SliderSwiper";
+import Footer from "../component/footer";
 
 function Product() {
   const [data, setData] = useState()
@@ -50,7 +51,7 @@ const handleDetail= (e, list) => {
         </div> )}
         </div> 
       </div>
-      
+      <Footer/>
     </div>
   );
 }
