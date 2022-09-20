@@ -13,11 +13,15 @@ import {
 } from "../redux/action";
 import { auth } from "../utils/firebase";
 import { signOut } from "firebase/auth";
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+import Menuhamburger from "./menuhamburger";
+
 
 function Navbar(props) {
   const [dropdown, setDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState([]);
   const [inputField, setInputField] = useState("");
+  const [menuDropdown, setMenuDropdown] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const options1 = { style: "currency", currency: "IDR" };
@@ -30,6 +34,7 @@ function Navbar(props) {
 
   const handleHome = () => {
     setDropdown(false);
+    setMenuDropdown(false)
     navigate("/");
   };
   const handleJackets = () => {
@@ -56,18 +61,21 @@ function Navbar(props) {
     const jackets = JSON.parse(localStorage.getItem("jackets"));
     dispatch(jacketsProduct(jackets));
     setDropdown(!dropdown);
+    setMenuDropdown(false)
   }
   function localShirts(data) {
     localStorage.setItem("shirts", JSON.stringify(data));
     const shirts = JSON.parse(localStorage.getItem("shirts"));
     dispatch(shirtsProduct(shirts));
     setDropdown(!dropdown);
+    setMenuDropdown(false)
   }
   function localPants(data) {
     localStorage.setItem("pants", JSON.stringify(data));
     const pants = JSON.parse(localStorage.getItem("pants"));
     dispatch(pantsProduct(pants));
     setDropdown(!dropdown);
+    setMenuDropdown(false)
   }
 
   // const handleNewArrival = () => {
@@ -111,14 +119,29 @@ function Navbar(props) {
     await signOut(auth);
     window.location.reload()
   };
-
+  const shoppingCart = () => {
+    setDropdown(false)
+    setMenuDropdown(false)
+    navigate("/shoppingcart")
+  }
+  const login = () => {
+    setDropdown(false)
+    setMenuDropdown(false)
+    navigate('/login')
+  }
+  const signup = () => {
+    setDropdown(false)
+    setMenuDropdown(false)
+    navigate('/signup')
+  }
   console.log("reducersCart", props);
 
   return (
     <div className="w-full h-12 bg-navbar flex items-center sm:px-0 px-2 justify-between shadow-lg shadow-button/[15%] relative z-10">
+      <p onClick={() => handleHome()} className="font-bold xl:text-2xl sm:hidden sm:pl-6 text-base text-button hover:cursor-pointer">TC</p>
       <h1
         onClick={() => handleHome()}
-        className="font-bold xl:text-2xl  lg:text-lg sm:text-base sm:pl-6 text-xs text-button hover:cursor-pointer"
+        className="sm:inline hidden font-bold xl:text-2xl  lg:text-lg sm:text-base sm:pl-6 text-xs text-button hover:cursor-pointer"
       >
         Tira Commerce
       </h1>
@@ -129,7 +152,7 @@ function Navbar(props) {
         >
           New Arrival
         </p> */}
-        <div>
+        <div className="sm:inline hidden">
           <p
             className="text-white  sm:text-sm text-xs hover:cursor-pointer flex"
             onClick={() => setDropdown(!dropdown)}
@@ -168,7 +191,7 @@ function Navbar(props) {
         className="flex items-center"
       >
         <input
-          className="rounded-tl-lg rounded-bl-lg xl:w-[500px] lg:w-[400px] sm:w-[100px] w-[100px] h-7 px-3 py-2"
+          className="rounded-tl-lg rounded-bl-lg xl:w-[500px] lg:w-[400px] sm:w-[100px] w-[150px] h-7 px-3 py-2"
           type="text"
           placeholder="Search Product . . ."
           onChange={(e) => searchFilter(e)}
@@ -198,7 +221,7 @@ function Navbar(props) {
       </form>
 
       <div
-        onClick={() => navigate("shoppingcart")}
+        onClick={() => shoppingCart()}
         className="flex  items-center hover:cursor-pointer"
       >
         {props.getCartsReducers.getCartResult.length ? (
@@ -215,6 +238,16 @@ function Navbar(props) {
           title="CART"
         />
       </div>
+      <div className="relative">
+
+        <div onClick={() => setMenuDropdown(!menuDropdown)} className="text-white sm:hidden">
+          {menuDropdown ? <AiOutlineClose/> : <AiOutlineMenu/>}
+        </div>
+        {menuDropdown ? <div className="absolute right-0">
+          <Menuhamburger menuDropdown={menuDropdown} setMenuDropdown={setMenuDropdown}/>
+        </div> : null }
+        
+      </div>
       {auth.currentUser && auth.currentUser.email ? (
         <div className="sm:flex justify-center items-center pr-6 hidden">
           <p className="text-white">{auth.currentUser.email}</p>
@@ -228,13 +261,13 @@ function Navbar(props) {
       ) : (
         <div className="sm:flex justify-center items-center pr-6 hidden">
           <button className="h-7 w-16 items-center border-2 border-white rounded-md">
-            <p onClick={() => navigate("login")} className="text-white text-sm">
+            <p onClick={() => login()} className="text-white text-sm">
               Log in
             </p>
           </button>
           <button className="h-7 w-16 items-center bg-button rounded-md ml-4">
             <p
-              onClick={() => navigate("signup")}
+              onClick={() => signup()}
               className="text-black text-sm"
             >
               Sign up

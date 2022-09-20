@@ -7,6 +7,7 @@ function Login() {
   const navigate = useNavigate()
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
+  const [errorCredentials, setErrorCredentials] = useState()
   
 
   onAuthStateChanged(auth, (currentUser) => {
@@ -24,7 +25,11 @@ function Login() {
     } catch (error) {
       console.log(error.message);
     }
+
+    setErrorCredentials('"Wrong Email or Password!"')
   }
+
+  console.log("AUTH =>", auth);
 
   return (
     <div className="w-screen h-[calc(100vh-64px)] flex justify-center items-center">
@@ -51,6 +56,7 @@ function Login() {
             Log in
           </button>
         </form>
+        {auth.currentUser?.email ? null : <p className="text-red-600 w-full flex justify-center items-center">{errorCredentials}</p>}
         <p className="text-sm sm:w-[400px] w-[300px] flex justify-center ml-[-24px] mt-4">
           Don't have an Account yet ?{" "}
           <button onClick={() => navigate("/signup")} className="text-red-600 ml-1">Register</button>

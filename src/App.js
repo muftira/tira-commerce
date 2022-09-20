@@ -13,12 +13,12 @@ import NewArrival from './pages/newArirval';
 import SearchResult from './pages/searchResult';
 import PopupLogin from './component/popupLogin';
 import Slider from "./component/slider";
+import { auth } from "./utils/firebase";
 
 function App() {
   return (
     <div>
       <Navbar/>
-      <PopupLogin/>
       <Routes>
         <Route path="/" element={<Product/>} />
         <Route path="newarrival" element={<NewArrival/>} />

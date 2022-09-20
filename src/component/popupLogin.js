@@ -8,7 +8,7 @@ function PopupLogin() {
   return (
     <div>
       {popupSign ? (
-        <div className="sm:hidden flex justify-center items-center w-full h-12 bg-navbar fixed bottom-0">
+        <div className={`sm:hidden flex  justify-center items-center w-full h-12 bg-navbar fixed bottom-0`}>
           <div
             onClick={() => setPopupSign(false)}
             className="absolute bottom-12 right-2"
