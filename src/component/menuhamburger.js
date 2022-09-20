@@ -75,7 +75,7 @@ function Menuhamburger({menuDropdown, setMenuDropdown}) {
       } 
 
   return (
-    <div className='w-[120px] h-[150px] sm:hidden flex flex-col justify-center items-center bg-white border border-neutral-400 rounded-md py-2 mt-2'>
+    <div className='w-[120px] h-[150px] sm:hidden flex flex-col justify-center items-center bg-white border border-neutral-400 rounded-md pt-4 mt-2'>
         <div>
           <p
             className="text-black  sm:text-sm text-xs hover:cursor-pointer flex"
