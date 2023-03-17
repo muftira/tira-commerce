@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const base_url = 'https://tira-commerce-backend.herokuapp.com'
+const base_url = 'https://tira-commerce-backend.vercel.app'
 
 export const getApi = () => axios.get(base_url+'/product')
 export const getCategory = (category) => axios.get(base_url+'/product?category.name='+category)
